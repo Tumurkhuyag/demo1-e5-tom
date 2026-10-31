@@ -252,7 +252,7 @@
             color: #ffffff;
             letter-spacing: -0.03em;
             margin-right: -0.03em;
-            transform: translateX(-20px);
+            transform: none;
             line-height: 0.8;
             margin-top: 0;
             margin-bottom: 0;
@@ -413,7 +413,7 @@
     </footer>
 
     <div class="footer-logo-wrap">
-        <h2 class="footer-logo-text">Loopstack</h2>
+        <h2 class="footer-logo-text">Newnomads</h2>
     </div>
 
     <div class="video-container">
@@ -456,6 +456,21 @@
                 wrapper.appendChild(inner);
                 logoText.appendChild(wrapper);
             });
+
+            // Подгоняем размер шрифта, чтобы слово целиком помещалось по ширине экрана
+            const fitLogo = () => {
+                const wrap = logoText.parentElement;
+                const styles = getComputedStyle(wrap);
+                const available = wrap.clientWidth - parseFloat(styles.paddingLeft) - parseFloat(styles.paddingRight);
+
+                logoText.style.fontSize = '100px';
+                const measured = [...logoText.children].reduce((sum, el) => sum + el.getBoundingClientRect().width, 0);
+                logoText.style.fontSize = `${Math.floor(100 * available / measured * 100) / 100}px`;
+            };
+
+            fitLogo();
+            document.fonts.ready.then(fitLogo);
+            window.addEventListener('resize', fitLogo);
         }
 
         // Разделение верхнего заголовка на слова для анимации появления снизу вверх из маски с блюром
